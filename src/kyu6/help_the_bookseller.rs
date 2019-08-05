@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 fn get_number_from_article(article: &str) -> Result<u16, String> {
     article.split_whitespace()
         .last()
@@ -7,26 +5,22 @@ fn get_number_from_article(article: &str) -> Result<u16, String> {
         .map(|s| s.parse::<u16>().expect("correct parsing"))
 }
 
-fn print_collection(collection: HashMap<&str, u16>) -> String {
-    collection.iter()
-        .map(|(&key, value)| format!("({} : {})", key, value))
-        .collect::<Vec<String>>()
-        .join(" - ")
-}
-
 pub fn stock_list(list_art: Vec<&str>, list_cat: Vec<&str>) -> String {
-    let mut res = HashMap::new();
+    if list_art.is_empty() || list_cat.is_empty() {
+        return "".to_owned();
+    }
+    let mut res = vec![];
     list_cat.iter()
-        .map( |&cat| {
-            let articles = list_art.iter()
+        .for_each(|&cat| {
+            let articles: u16 = list_art.iter()
                 .filter(|&art| art.starts_with(cat))
                 .map(|&art| get_number_from_article(art))
                 .filter(|res_sum| res_sum.is_ok())
                 .map(|res_sum| res_sum.expect("something went wrong"))
                 .sum();
-            res.insert(cat, articles);
+            res.push(format!("({} : {})", cat, articles));
         });
-    print_collection(res)
+    res.join(" - ")
 }
 
 #[cfg(test)]
@@ -54,5 +48,12 @@ mod tests {
         c = vec!["A", "B"];
         dotest(b, c, "(A : 200) - (B : 1140)");
 
+        b = vec![];
+        c = vec!["A"];
+        dotest(b, c, "");
+
+        b = vec!["ABAR 200"];
+        c = vec![];
+        dotest(b, c, "");
     }
 }
