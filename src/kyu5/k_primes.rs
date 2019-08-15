@@ -49,16 +49,19 @@ fn count_kprimes(k: i32, start: i32, nd: i32) -> Vec<i32> {
 }
 
 fn puzzle(s: i32) -> i32 {
-    let primes = get_primes_up_to(s);
-    let three_primes = count_kprimes(3, 0, s);
     let seven_primes = count_kprimes(7, 0, s);
+    let smallest_7_prime_opt = seven_primes.first();
+    if smallest_7_prime_opt.is_none() {
+        return 0;
+    }
+    let smallest_7_prime = smallest_7_prime_opt.unwrap().to_owned();
+    let three_primes = count_kprimes(3, 0, s - smallest_7_prime);
+    let primes = get_primes_up_to(s - smallest_7_prime);
     let mut counter = 0;
     for i in &seven_primes {
-        for j in &three_primes {
-            for k in &primes {
-                if *i + *j + *k == s {
-                    counter += 1;
-                }
+        for j in three_primes.iter().filter(|&&n| n < s - *i) {
+            if primes.contains(&(s - *i - *j)) {
+                counter += 1;
             }
         }
     }
