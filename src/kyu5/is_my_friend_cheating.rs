@@ -1,13 +1,15 @@
 fn remove_nb(m: i32) -> Vec<(i32, i32)> {
     let mut pairs = vec![];
-    let sum: i32 = (0..=m).sum();
-    for a in 0..=m {
-        for b in 0..=m {
-            if a * b == sum - a - b {
-                pairs.push((a, b));
-            }
+    let sum: u64 = (1..=m as u64).sum();
+    for a in (m as u64 / 2..=m as u64).rev() {
+        let remainder = (sum - a) % a;
+        let b = (sum - a) / a;
+        if remainder <= m as u64 && b <= m as u64 && b == remainder {
+            pairs.push((b as i32, a as i32));
+            pairs.push((a as i32, b as i32));
         }
     }
+    pairs.sort_by_key(|(a, _)| *a);
     pairs
 }
 
