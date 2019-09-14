@@ -40,12 +40,10 @@ fn recover_secret(triplets: Vec<[char; 3]>) -> String {
     let mut secret = "".to_string();
     loop {
         let chars_matrix = take_all_omitting(&triplets, &secret);
-        println!("ALL: {:?}", chars_matrix);
         if chars_matrix.is_empty() { break; }
         take_first_omitting(&chars_matrix, &secret).iter()
             .filter(|&&c| {
                 let positions = positions_of(c, &chars_matrix);
-                println!("Found {} at {:?}", c, positions);
                 positions.is_empty() || positions.iter().all(|&pos| pos == 0)
             })
             .take(1)
