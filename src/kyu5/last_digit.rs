@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use std::cmp::min;
 
 fn get_last_digits(number: &str, places: usize) -> i32 {
@@ -19,13 +18,13 @@ fn get_last_digit_of_power(n: i32, power: u32) -> i32 {
 }
 
 fn last_digit(str1: &str, str2: &str) -> i32 {
-    if str1 == "0" && str2 == "0" {
+    if str2 == "0" {
         return 1;
     }
     let last = get_last_digits(str1, 1);
     match last {
         0 | 1 | 5 | 6 => last,
-        4 | 9         => get_last_digit_of_power(last, get_last_digits(str2, 1) as u32),
+        4 | 9         => get_last_digit_of_power(last, get_last_digits(str2, 1) as u32 % 2 + 2),
         _             => get_last_digit_of_power(last,
                                                  get_last_digits(str2, 2) as u32 % 4 + 4)
     }
