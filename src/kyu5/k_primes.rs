@@ -38,7 +38,7 @@ fn is_k_prime(n: i32, k: i32, primes: &Vec<i32>) -> bool {
 }
 
 fn get_to_square_range(n: i32) -> RangeInclusive<i32> {
-    (2..=(n as f32).sqrt().floor() as i32)
+    2..=(n as f32).sqrt().floor() as i32
 }
 
 fn count_kprimes(k: i32, start: i32, nd: i32) -> Vec<i32> {
